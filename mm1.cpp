@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <queue>
+#include <string>
 
 //  random generator using exponential distribution
 std::default_random_engine generator;
@@ -27,10 +28,20 @@ class Simulation {
     std::queue<double> Myqueue;
     double tmp1 = s_gen();
     int etype;
+    std::string sstatus = "idle";
 
   public:
+  //scheduling packet arrival
   	void scheduling(){
   		et = std::min(at,dt);
+  		std::cout<<"pid:"<<pid<<std::endl;
+  		std::cout<<"Server status: "<<sstatus<<std::endl;
+  	    std::cout<<"Packet in server:"<<sink.front()<<std::endl;
+  		std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
+  		std::cout<<"Event time: "<<et<<std::endl;
+  		std::cout<<"arrival time: "<<at<<"\tdeparture time: "<<dt<<std::endl;
+  	    std::cout<<"-----------------------------------------"<<std::endl;
+  	    
   		if(cqs < maxque){
   			pid++;
   			Myqueue.push(at);
@@ -48,25 +59,33 @@ class Simulation {
   			npdrop++;
   			at = simclock + p_gen();
   		}
-  		std::cout<<"pid:"<<pid<<std::endl;
-  		std::cout<<"Currently in queue:"<<Myqueue.front()<<std::endl;
-  		std::cout<<"Currently in sink:"<<sink.front()<<std::endl;
-  		std::cout<<"arrival time"<<at<<std::endl;
   	}
-  	void event(){
-  	    if(etype == 0){
-  	        tmp1 = s_gen();
-  	        std::cout<<">>>>Service time>>>>"<<tmp1<<std::endl;
-  	        dt = simclock + tmp1;
-  	    }
-  	}
-
+  	
+  //update simulation clock
   	void update_clock(){
   		simclock = et;
   	}
-  	void result(){
-  		std::cout<<"departure time:"<<dt<<std::endl;
+  	
+  //determine the eventype
+  	void event(){
+  	    if(etype == 0){
+  	        pgf();
+  	    }
+  	 //   else{
+  	 //       pdf();
+  	 //   }
   	}
+  	
+  //packet generation function
+  	void pgf(){
+  	    tmp1 = s_gen();
+  	    std::cout<<">>>>Service time>>>>"<<tmp1<<std::endl;
+  	    dt = simclock + tmp1;
+  	}
+
+//   	void result(){
+  	    	
+//   	}
 
   	double p_gen(){
   		double nRandom = arrivalrate(generator);
@@ -94,7 +113,7 @@ int main() {
 	test.scheduling();
 	test.update_clock();
 	test.event();
-	test.result();
+// 	test.result();
 
 	}
 	
