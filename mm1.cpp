@@ -48,7 +48,7 @@ class Simulation {
 int main() {
   Simulation myObj;
   if(myObj.getDt()>myObj.getAt()){
-  	myObj.setSalary(50000);
+  	myObj.setDt(50000);
   	std::cout << myObj.getDt();
   }
   
