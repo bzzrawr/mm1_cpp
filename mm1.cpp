@@ -19,7 +19,7 @@ class Simulation {
     int maxque = 0;
 
   public:
-  	int scheduling(){
+  	void scheduling(){
   		et = std::min(at,dt);
   	}
   	void result(){
