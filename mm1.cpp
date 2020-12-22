@@ -30,24 +30,27 @@ class Simulation {
   private:
     // Private attribute
     double dt = std::numeric_limits<double>::max();
-
+    double at = 0;
   public:
     // Setter
-    void setSalary(double s) {
+    void setDt(double s) {
       dt = s;
     }
     // Getter
-    int getSalary() {
+    int getDt() {
       return dt;
+    }
+    int getAt(){
+    	return at;
     }
 };
 
 int main() {
   Simulation myObj;
-  // if(myObj.getSalary()>100){
-  // 	myObj.setSalary(50000);
-  	
-  // }
-  std::cout << myObj.getSalary();
+  if(myObj.getSalary()>myObj.getAt()){
+  	myObj.setSalary(50000);
+  	std::cout << myObj.getSalary();
+  }
+  
   
 }
