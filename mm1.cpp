@@ -7,13 +7,13 @@ private:
 	double dt = std::numeric_limits<double>::infinity();
 
 public:
-	void get_dt(){
-		std::cout<<"DT value"<<double dt;
+	int get_dt(){
+		return dt;
 	}
 }
 
 int main(){
 	sim test;
-	test.get_dt();
+	std::cout<<"test"<<test.get_dt();
 	return 0;
 }
