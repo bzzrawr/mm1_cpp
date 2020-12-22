@@ -8,7 +8,7 @@ private:
 
 public:
 	void get_dt(){
-		std::cout<<"DT value"<<dt<<endl;
+		std::cout<<"DT value"<<dt;
 	}
 }
 
