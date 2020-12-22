@@ -28,7 +28,7 @@ using namespace std;
 class Simulation {
   private:
     // Private attribute
-    double dt = numeric_limits::infinity();
+    double dt = infinity();
 
   public:
     // Setter
