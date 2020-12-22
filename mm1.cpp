@@ -7,6 +7,9 @@ private:
 	double dt = std::numeric_limits<double>::infinity();
 
 public:
+	void set_dt(double s){
+		dt = s;
+	}
 	int get_dt(){
 		return dt;
 	}
