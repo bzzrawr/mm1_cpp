@@ -69,7 +69,7 @@ int main()
     
     
  
-    if(inf > max){
+    if(get() > max){
         std::cout << get() << " is greater than " << max << '\n';
         }
 }
