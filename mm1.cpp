@@ -4,14 +4,14 @@ class sim{
 private:
 	double simclock = 0;
 	double at = 0
-	double dt;
+	int salary;
 
 public:
 	void set_dt(double s){
-		dt = s;
+		salary = s;
 	}
 	int get_dt(){
-		return dt;
+		return salary;
 	}
 }
 
