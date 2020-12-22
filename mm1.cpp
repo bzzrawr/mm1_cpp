@@ -23,12 +23,12 @@
 // 	return 0;
 // }
 #include <iostream>
-using namespace std;
+// using namespace std;
 
 class Simulation {
   private:
     // Private attribute
-    double dt;
+    double dt = std::numeric_limits<double>::infinity();
 
   public:
     // Setter
@@ -44,6 +44,6 @@ class Simulation {
 int main() {
   Simulation myObj;
   myObj.setSalary(50000);
-  cout << myObj.getSalary();
+  std::cout << myObj.getSalary();
   return 0;
 }
