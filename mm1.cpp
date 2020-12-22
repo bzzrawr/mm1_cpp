@@ -29,7 +29,7 @@
 class Simulation {
   private:
     // Private attribute
-    double dt = std::numeric_limits<double>::infinity();
+    double dt = std::numeric_limits<double>::max();
 
   public:
     // Setter
@@ -49,5 +49,4 @@ int main() {
   	std::cout << myObj.getSalary();
   }
   
-  return 0;
 }
