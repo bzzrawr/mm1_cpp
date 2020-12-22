@@ -53,6 +53,6 @@ int main() {
   	myObj.setDt(50000);
   	std::cout << myObj.getDt();
   }
-  
+  std::cout << myObj.getDt();
   
 }
