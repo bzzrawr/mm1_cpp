@@ -25,24 +25,24 @@
 #include <iostream>
 using namespace std;
 
-class Employee {
+class Simulation {
   private:
     // Private attribute
-    int salary;
+    double dt;
 
   public:
     // Setter
-    void setSalary(int s) {
-      salary = s;
+    void setSalary(double s) {
+      dt = s;
     }
     // Getter
     int getSalary() {
-      return salary;
+      return dt;
     }
 };
 
 int main() {
-  Employee myObj;
+  Simulation myObj;
   myObj.setSalary(50000);
   cout << myObj.getSalary();
   return 0;
