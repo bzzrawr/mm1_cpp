@@ -44,9 +44,10 @@ class Simulation {
 
 int main() {
   Simulation myObj;
-  if(myObj.getSalary()>100){
-  	myObj.setSalary(50000);
-  	std::cout << myObj.getSalary();
-  }
+  // if(myObj.getSalary()>100){
+  // 	myObj.setSalary(50000);
+  	
+  // }
+  std::cout << myObj.getSalary();
   
 }
