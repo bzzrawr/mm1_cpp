@@ -8,27 +8,27 @@
 
 //  random generator using exponential distribution
 std::default_random_engine generator;
-std::exponential_distribution<double>arrivalrate(6.0);
-std::exponential_distribution<double>servicetime(3.0);
+std::exponential_distribution<double>arrivalrate(6.0); //arrival rate lambda is 6
+std::exponential_distribution<double>servicetime(3.0); //service rate u is 3
 
 class Simulation {
   private:
-    // Private attribute
-    double dt = std::numeric_limits<double>::max();
-    double at = p_gen();
-    double simclock = 0;
-    double et = 0.0;
-    std::queue<double> sink;
-    int n_arrival = 0;
-    int n_depart = 0;
-    int npdrop = 0;
-    int pid = 0;
-    int maxque;
-    int cqs = 0;
-    std::queue<double> Myqueue;
-    double tmp1 = s_gen();
-    int etype;
-    std::string sstatus = "idle";
+    // initialize private attribute
+    double dt = std::numeric_limits<double>::max(); //set departure time as infinity
+    double at = p_gen();                            //set first arrival time 
+    double simclock = 0;                            //set simulation clock
+    double et = 0;                                  //set event time
+    std::queue<double> sink;                        //array for server
+    int n_arrival = 0;                              //no of packet arrive
+    int n_depart = 0;                               //no of packet depart
+    int npdrop = 0;                                 //no of packet drop
+    int pid = 0;                                    //packet id
+    int maxque;                                     //maximum queue size
+    int cqs = 0;                                    //current queue size
+    std::queue<double> Myqueue;                     //array for packet queue
+    double tmp1 = s_gen();                          //temporary value for service time
+    int etype;                                      //event type 
+    std::string sstatus = "idle";                   //server status
 
   public:
   //scheduling packet arrival
@@ -87,18 +87,18 @@ class Simulation {
   	    	
 //   	}
 
+    //function for generating interarrival time
   	double p_gen(){
   		double nRandom = arrivalrate(generator);
   		return nRandom;
   	}
+  	//function for generating service time
   	double s_gen(){
   		double nRandom2 = servicetime(generator);
   		return nRandom2;
   	}
-  	double get_et(){
-  		return et;
-  	}
   	
+  	//function to set maximum queue size
   	void ggwp(){
   	    std::cout<<"Enter maximum queue size: ";
   	    std::cin>>maxque;
