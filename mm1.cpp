@@ -22,54 +22,37 @@
 // 	std::cout<<"test"<<test.get_dt();
 // 	return 0;
 // }
-// #include <iostream>
-// #include <limits>
-// // using namespace std;
-
-// class Simulation {
-//   private:
-//     // Private attribute
-//     double dt = std::numeric_limits<double>::max();
-//     double at = 0;
-//   public:
-//     // Setter
-//     void setDt(double s) {
-//       dt = s;
-//     }
-//     // Getter
-//     int getDt() {
-//       return dt;
-//     }
-//     int getAt(){
-//     	return at;
-//     }
-// };
-
-// int main() {
-//   Simulation myObj;
-//   if(myObj.getDt()>myObj.getAt()){
-//   	myObj.setDt(50000);
-//   	std::cout << myObj.getDt();
-//   }
-  
-  
-// }
-
 #include <iostream>
 #include <limits>
+// using namespace std;
 
-double inf = std::numeric_limits<double>::infinity();
+class Simulation {
+  private:
+    // Private attribute
+    double dt = std::numeric_limits<double>::max();
+    double at = 0;
+  public:
+    // Setter
+    void setDt(double s) {
+      dt = s;
+    }
+    // Getter
+    int getDt() {
+      return dt;
+    }
+    int getAt(){
+    	return at;
+    }
+};
 
-int get(){
-    return inf;
-}
-int main()
-{
-    double max = std::numeric_limits<double>::max();
-    
-    
- 
-    if(get() > max){
-        std::cout << get() << " is greater than " << max << '\n';
-        }
+int main() {
+  Simulation myObj;
+  double x = myObj.getDt();
+  double y = myObj.getAt();
+  if(x > y){
+  	myObj.setDt(50000);
+  	std::cout << myObj.getDt();
+  }
+  
+  
 }
