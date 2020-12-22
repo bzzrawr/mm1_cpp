@@ -23,7 +23,7 @@
 // 	return 0;
 // }
 #include <iostream>
-// using namespace std;
+using namespace std;
 
 class Simulation {
   private:
