@@ -29,6 +29,7 @@ class Simulation {
     double tmp1 = s_gen();                          //temporary value for service time
     int etype;                                      //event type 
     std::string sstatus = "idle";                   //server status
+    double tmp2;
 
   public:
   //scheduling packet arrival
@@ -71,17 +72,42 @@ class Simulation {
   	    if(etype == 0){
   	        pgf();
   	    }
-  	 //   else{
-  	 //       pdf();
-  	 //   }
+  	    else{
+  	        pdf();
+  	    }
   	}
   	
   //packet generation function
   	void pgf(){
+  	    n_arrival++;
+  	    sstatus = "busy";
   	    tmp1 = s_gen();
   	    std::cout<<">>>>Service time>>>>"<<tmp1<<std::endl;
   	    dt = simclock + tmp1;
+  	    at = simclock + p_gen();
+  	    etype = 1;
   	}
+  	
+  //packet departure function
+  void pdf(){
+      cqs--;
+      sstatus = "idle";
+      n_depart++;
+      sink.pop();
+      if(cqs>=0){
+          sink.push(Myqueue.front());
+          Myqueue.pop();
+          tmp2 = s_gen();
+          std::cout<<">>>>Service time<<<<"<<tmp2<<std::endl;
+          dt = simclock + tmp2;
+          
+      }
+      else{
+          cqs++;
+          dt = std::numeric_limits<double>::max();
+      }
+      
+  }
 
 //   	void result(){
   	    	
