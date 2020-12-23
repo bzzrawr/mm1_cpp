@@ -26,7 +26,7 @@ class Simulation {
     int maxque;                                     //maximum queue size
     int cqs = 0;                                    //current queue size
     std::queue<double> Myqueue;                     //array for packet queue
-    double tmp1 = s_gen();                          //temporary value for service time
+    double st;                          //temporary value for service time
     int etype;                                      //event type 
     std::string sstatus = "idle";                   //server status
     double tmp2;
@@ -35,31 +35,39 @@ class Simulation {
   //scheduling packet arrival
   	void scheduling(){
   		et = std::min(at,dt);
+  		st = s_gen();
   		std::cout<<"pid:"<<pid<<std::endl;
   		std::cout<<"Server status: "<<sstatus<<std::endl;
+  		std::cout<<"Currently in queue: "<<cqs<<std::endl;
   	    std::cout<<"Packet in server:"<<sink.front()<<std::endl;
   		std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
+  		std::cout<<"No of packet arrived: "<<n_arrival<<std::endl;
+  		std::cout<<"No of packet departed: "<<n_depart<<std::endl;
+  		std::cout<<"No of packet dropped: "<<npdrop<<std::endl;
   		std::cout<<"Event time: "<<et<<std::endl;
   		std::cout<<"arrival time: "<<at<<"\tdeparture time: "<<dt<<std::endl;
   	    std::cout<<"-----------------------------------------"<<std::endl;
+  	}
+  	void fifo(){
+  	    if(cqs<maxque){
+  	        pid++;
+  	        Myqueue.push(at);                             //push arrival time to Q
+  	        if(sink.empty()){
+  	            sink.push(Myqueue.front());               //1st el Q push to sink
+  	            Myqueue.pop();                            //pop 1st element from Q
+  	            if(cqs<=1){
+  	                std::cout<<">>>>Service time>>>>"<<st<<std::endl;
+  	                dt = simclock + st;
+  	            }
+  	        }
+  	        else{
+  	            cqs++;                                    //current Q size increase by 1
+  	        }
+  	    }
+  	    else{
+  	        npdrop++;                                     //when reach maxque drop packet
+  	    }
   	    
-  		if(cqs < maxque){
-  			pid++;
-  			Myqueue.push(at);
-  			if(sink.size()==0){
-  			    sink.push(Myqueue.front());
-  			    Myqueue.pop();
-  			    etype = 0;
-  			}
-  			else{
-  			    cqs++;
-  			    at = simclock + p_gen();
-  			}
-  		}
-  		else{
-  			npdrop++;
-  			at = simclock + p_gen();
-  		}
   	}
   	
   //update simulation clock
@@ -69,7 +77,7 @@ class Simulation {
   	
   //determine the eventype
   	void event(){
-  	    if(etype == 0){
+  	    if(at<=dt){
   	        pgf();
   	    }
   	    else{
@@ -81,26 +89,20 @@ class Simulation {
   	void pgf(){
   	    n_arrival++;
   	    sstatus = "busy";
-  	    tmp1 = s_gen();
-  	    std::cout<<">>>>Service time>>>>"<<tmp1<<std::endl;
-  	    dt = simclock + tmp1;
   	    at = simclock + p_gen();
-  	    etype = 1;
   	}
   	
   //packet departure function
-  void pdf(){
-      cqs--;
-      sstatus = "idle";
+  	void pdf(){
       n_depart++;
+      sstatus = "idle";
       sink.pop();
+      cqs--;
       if(cqs>=0){
           sink.push(Myqueue.front());
           Myqueue.pop();
-          tmp2 = s_gen();
-          std::cout<<">>>>Service time<<<<"<<tmp2<<std::endl;
-          dt = simclock + tmp2;
-          
+          std::cout<<">>>>Service time<<<<"<<st<<std::endl;
+          dt = simclock + st;
       }
       else{
           cqs++;
@@ -138,6 +140,7 @@ int main() {
 	for(int i=0;i<10;++i){
 	test.scheduling();
 	test.update_clock();
+	test.fifo();
 	test.event();
 // 	test.result();
 
