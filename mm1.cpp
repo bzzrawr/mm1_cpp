@@ -35,11 +35,10 @@ class Simulation {
   //scheduling packet arrival
   	void scheduling(){
   		et = std::min(at,dt);
-  		st = s_gen();
   		std::cout<<"pid:"<<pid<<std::endl;
   		std::cout<<"Server status: "<<sstatus<<std::endl;
   		std::cout<<"Currently in queue: "<<cqs<<std::endl;
-  	    std::cout<<"Packet in server:"<<sink.front()<<std::endl;
+      std::cout<<"Packet in server:"<<sink.front()<<std::endl;
   		std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
   		std::cout<<"No of packet arrived: "<<n_arrival<<std::endl;
   		std::cout<<"No of packet departed: "<<n_depart<<std::endl;
@@ -89,8 +88,30 @@ class Simulation {
   	void pgf(){
   	    n_arrival++;
   	    sstatus = "busy";
-  	    at = simclock + p_gen();
-  	}
+  	    if(cqs<maxque){
+          id++;
+          Myqueue.push(at);
+          at = simclock + p_gen();
+          
+          if(sink.empty()){
+            sink.push(Myqueue.front());
+            Myqueue.pop();
+            if(cqs<=1){
+              st = s_gen();
+              dt = simclock + st;
+            }
+
+          }
+          else{
+            cqs++;
+          }
+
+        }
+        else{
+          npdrop++;
+          at = simclock + p_gen();
+        }
+      }
   	
   //packet departure function
   	void pdf(){
