@@ -31,9 +31,11 @@ class Simulation {
     int etype;                                      //event type 
     std::string sstatus = "idle";                   //server status
     double st2;										//temporary value for service time
-    double plr = 0;										//packet loss ratio
+    double plr = 0;									//packet loss ratio
     double delay = 0;								//delay
     double tmp1;									//temporary value for calculating delay
+    double avgdelay;								//average delay
+    int npdelay = 1;								//no of packet delayed
 
   public:
   //scheduling packet arrival
@@ -98,13 +100,14 @@ class Simulation {
   //packet departure function
     void pdf(){
       sstatus = "idle";
-      tmp1 = sink.front();
-      delay = delay + (dt - tmp1);
       sink.pop();
       n_depart++;
       cqs--;
       if(cqs>=0){
+      	npdelay++;
         sink.push(Myqueue.front());
+        tmp1 = Myqueue.front();
+        delay = delay + (dt - tmp1);
         Myqueue.pop();
         st2 = s_gen();
         dt = simclock + st2;
@@ -116,9 +119,11 @@ class Simulation {
     }
 
    void result(){
-   		plr = npdrop / n_arrival;
+   		plr = (double)npdrop / (double)n_arrival;
+   		avgdelay = delay/(double)npdelay;
    		std::cout<<"packet loss rate: "<<plr<<std::endl;
    		std::cout<<"Total delay: "<<delay<<std::endl;
+   		std::cout<<"Average delay: "<<avgdelay<<std::endl;
    }
 
     //function for generating interarrival time
@@ -147,9 +152,8 @@ int main() {
   test.scheduling();
   test.update_clock();
   test.event();
-  test.result();
   }
-  
+  test.result();
   
 
   
