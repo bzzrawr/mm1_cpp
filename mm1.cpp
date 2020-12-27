@@ -39,14 +39,14 @@ class Simulation {
       std::cout<<"pid:"<<pid<<std::endl;
       std::cout<<"Server status: "<<sstatus<<std::endl;
       std::cout<<"Currently in queue: "<<cqs<<std::endl;
-        std::cout<<"Packet in server:"<<sink.front()<<std::endl;
+      std::cout<<"Packet in server:"<<sink.front()<<std::endl;
       std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
       std::cout<<"No of packet arrived: "<<n_arrival<<std::endl;
       std::cout<<"No of packet departed: "<<n_depart<<std::endl;
       std::cout<<"No of packet dropped: "<<npdrop<<std::endl;
       std::cout<<"Event time: "<<et<<std::endl;
       std::cout<<"arrival time: "<<at<<"\tdeparture time: "<<dt<<std::endl;
-        std::cout<<"-----------------------------------------"<<std::endl;
+      std::cout<<"-----------------------------------------"<<std::endl;
     }
     
   //update simulation clock
