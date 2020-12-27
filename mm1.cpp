@@ -27,10 +27,13 @@ class Simulation {
     int maxque;                                     //maximum queue size
     int cqs = 0;                                    //current queue size
     std::queue<double> Myqueue;                     //array for packet queue
-    double st;                          //temporary value for service time
+    double st;                          			//temporary value for service time
     int etype;                                      //event type 
     std::string sstatus = "idle";                   //server status
-    double st2;
+    double st2;										//temporary value for service time
+    double plr = 0;										//packet loss ratio
+    double delay = 0;								//delay
+    double tmp1;									//temporary value for calculating delay
 
   public:
   //scheduling packet arrival
@@ -95,6 +98,8 @@ class Simulation {
   //packet departure function
     void pdf(){
       sstatus = "idle";
+      tmp1 = sink.front();
+      delay = delay + (dt - tmp1);
       sink.pop();
       n_depart++;
       cqs--;
@@ -110,9 +115,11 @@ class Simulation {
       }
     }
 
-//    void result(){
-          
-//    }
+   void result(){
+   		plr = npdrop / n_arrival;
+   		std::cout<<"packet loss rate: "<<plr<<std::endl;
+   		std::cout<<"Total delay: "<<delay<<std::endl;
+   }
 
     //function for generating interarrival time
     double p_gen(){
@@ -136,13 +143,13 @@ class Simulation {
 int main() {
   Simulation test;
   test.ggwp();
-  for(int i=0;i<100;++i){
+  for(int i=0;i<10;++i){
   test.scheduling();
   test.update_clock();
   test.event();
-//  test.result();
-
+  test.result();
   }
+  
   
 
   
