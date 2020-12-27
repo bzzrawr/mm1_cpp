@@ -7,9 +7,10 @@
 #include <string>
 
 //  random generator using exponential distribution
-std::default_random_engine generator;
-std::exponential_distribution<double>arrivalrate(6.0); //arrival rate lambda is 6
-std::exponential_distribution<double>servicetime(3.0); //service rate u is 3
+int seed =0;
+std::default_random_engine generator (seed);
+std::exponential_distribution<double>arrivalrate(8); //arrival rate lambda is 8
+std::exponential_distribution<double>servicetime(9); //service rate u is 9
 
 class Simulation {
   private:
@@ -29,67 +30,45 @@ class Simulation {
     double st;                          //temporary value for service time
     int etype;                                      //event type 
     std::string sstatus = "idle";                   //server status
-    double tmp2;
+    double st2;
 
   public:
   //scheduling packet arrival
-  	void scheduling(){
-  		et = std::min(at,dt);
-  		std::cout<<"pid:"<<pid<<std::endl;
-  		std::cout<<"Server status: "<<sstatus<<std::endl;
-  		std::cout<<"Currently in queue: "<<cqs<<std::endl;
-      std::cout<<"Packet in server:"<<sink.front()<<std::endl;
-  		std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
-  		std::cout<<"No of packet arrived: "<<n_arrival<<std::endl;
-  		std::cout<<"No of packet departed: "<<n_depart<<std::endl;
-  		std::cout<<"No of packet dropped: "<<npdrop<<std::endl;
-  		std::cout<<"Event time: "<<et<<std::endl;
-  		std::cout<<"arrival time: "<<at<<"\tdeparture time: "<<dt<<std::endl;
-  	    std::cout<<"-----------------------------------------"<<std::endl;
-  	}
-  	void fifo(){
-  	    if(cqs<maxque){
-  	        pid++;
-  	        Myqueue.push(at);                             //push arrival time to Q
-  	        if(sink.empty()){
-  	            sink.push(Myqueue.front());               //1st el Q push to sink
-  	            Myqueue.pop();                            //pop 1st element from Q
-  	            if(cqs<=1){
-  	                std::cout<<">>>>Service time>>>>"<<st<<std::endl;
-  	                dt = simclock + st;
-  	            }
-  	        }
-  	        else{
-  	            cqs++;                                    //current Q size increase by 1
-  	        }
-  	    }
-  	    else{
-  	        npdrop++;                                     //when reach maxque drop packet
-  	    }
-  	    
-  	}
-  	
+    void scheduling(){
+      et = std::min(at,dt);
+      std::cout<<"pid:"<<pid<<std::endl;
+      std::cout<<"Server status: "<<sstatus<<std::endl;
+      std::cout<<"Currently in queue: "<<cqs<<std::endl;
+        std::cout<<"Packet in server:"<<sink.front()<<std::endl;
+      std::cout<<"Packet in queue:"<<Myqueue.front()<<std::endl;
+      std::cout<<"No of packet arrived: "<<n_arrival<<std::endl;
+      std::cout<<"No of packet departed: "<<n_depart<<std::endl;
+      std::cout<<"No of packet dropped: "<<npdrop<<std::endl;
+      std::cout<<"Event time: "<<et<<std::endl;
+      std::cout<<"arrival time: "<<at<<"\tdeparture time: "<<dt<<std::endl;
+        std::cout<<"-----------------------------------------"<<std::endl;
+    }
+    
   //update simulation clock
-  	void update_clock(){
-  		simclock = et;
-  	}
-  	
+    void update_clock(){
+      simclock = et;
+    }
+    
   //determine the eventype
-  	void event(){
-  	    if(at<=dt){
-  	        pgf();
-  	    }
-  	    else{
-  	        pdf();
-  	    }
-  	}
-  	
+    void event(){
+        if(at<=dt){
+            pgf();
+        }
+        else{
+            pdf();
+        }
+    }
+    
   //packet generation function
-  	void pgf(){
-  	    n_arrival++;
-  	    sstatus = "busy";
-  	    if(cqs<maxque){
-          id++;
+    void pgf(){
+        n_arrival++;
+        sstatus = "busy";
+        if(cqs<maxque){
           Myqueue.push(at);
           at = simclock + p_gen();
           
@@ -112,61 +91,59 @@ class Simulation {
           at = simclock + p_gen();
         }
       }
-  	
+    
   //packet departure function
-  	void pdf(){
-      n_depart++;
+    void pdf(){
       sstatus = "idle";
       sink.pop();
+      n_depart++;
       cqs--;
       if(cqs>=0){
-          sink.push(Myqueue.front());
-          Myqueue.pop();
-          std::cout<<">>>>Service time<<<<"<<st<<std::endl;
-          dt = simclock + st;
+        sink.push(Myqueue.front());
+        Myqueue.pop();
+        st2 = s_gen();
+        dt = simclock + st2;
       }
       else{
-          cqs++;
-          dt = std::numeric_limits<double>::max();
+        cqs++;
+        dt = std::numeric_limits<double>::max();
       }
-      
-  }
+    }
 
-//   	void result(){
-  	    	
-//   	}
+//    void result(){
+          
+//    }
 
     //function for generating interarrival time
-  	double p_gen(){
-  		double nRandom = arrivalrate(generator);
-  		return nRandom;
-  	}
-  	//function for generating service time
-  	double s_gen(){
-  		double nRandom2 = servicetime(generator);
-  		return nRandom2;
-  	}
-  	
-  	//function to set maximum queue size
-  	void ggwp(){
-  	    std::cout<<"Enter maximum queue size: ";
-  	    std::cin>>maxque;
-  	}
+    double p_gen(){
+      double nRandom = arrivalrate(generator);
+      return nRandom;
+    }
+    //function for generating service time
+    double s_gen(){
+      double nRandom2 = servicetime(generator);
+      return nRandom2;
+    }
+    
+    //function to set maximum queue size
+    void ggwp(){
+        std::cout<<"Enter maximum queue size: ";
+        std::cin>>maxque;
+    }
 
 };
 
 int main() {
-	Simulation test;
-	test.ggwp();
-	for(int i=0;i<10;++i){
-	test.scheduling();
-	test.update_clock();
-	test.fifo();
-	test.event();
-// 	test.result();
+  Simulation test;
+  test.ggwp();
+  for(int i=0;i<100;++i){
+  test.scheduling();
+  test.update_clock();
+  test.event();
+//  test.result();
 
-	}
-	
+  }
+  
 
   
 }
